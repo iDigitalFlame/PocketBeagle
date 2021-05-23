@@ -15,7 +15,7 @@ or by issuing the command:
 
 - `wget http://os.archlinuxarm.org/os/ArchLinuxARM-am33x-latest.tar.gz`
 - or
-- `curl -o ArchLinuxARM-am33x-latest.tar.gz http://os.archlinuxarm.org/os/ArchLinuxARM-am33x-latest.tar.gz`
+- `curl -Lo ArchLinuxARM-am33x-latest.tar.gz http://os.archlinuxarm.org/os/ArchLinuxARM-am33x-latest.tar.gz`
 
 The `UbootRepo` directory is a modified Uboot build by @NitroProp [https://github.com/NitroProp/PocketBeagle-ARCH-ReARMed](https://github.com/NitroProp/PocketBeagle-ARCH-ReARMed) (thanks!) that is used for booting. (duh).
 
