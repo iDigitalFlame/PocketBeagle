@@ -26,77 +26,77 @@ exec() {
         if [ $r -eq 0 ]; then
             return
         fi
-        echo "\033[1;31mCommand \033[0m\"${1}\"\033[1;31m exited witn a non-zero \033[0m(${r})\033[1;31m status code!\033[0m" 1>&2
+        echo -e "\033[1;31mCommand \033[0m\"${1}\"\033[1;31m exited witn a non-zero \033[0m(${r})\033[1;31m status code!\033[0m" 1>&2
         cleanup 1
     fi
     if [ $r -ne $2 ]; then
-        echo "\033[1;31mCommand \033[0m\"${1}\"\033[1;31m exited with a \033[0m\"${r}\"\033[1;31m status code!\033[0m" 1>&2
+        echo -e "\033[1;31mCommand \033[0m\"${1}\"\033[1;31m exited with a \033[0m\"${r}\"\033[1;31m status code!\033[0m" 1>&2
         cleanup 1
     fi
 }
 print() {
-    echo -n "\033[1;32m"
+    echo -e -n "\033[1;32m"
     echo $*
-    echo -n "\033[0m"
+    echo -e -n "\033[0m"
 }
 checks() {
     which dd 1> /dev/null 2> /dev/null
     if [ $? -ne 0 ]; then
-        echo '\033[1;31m"\033[0mdd" is missing, please install "\033[0mcoreutils\033[1;31m" first!\033[0m' 1>&2
+        echo -e '\033[1;31m"\033[0mdd" is missing, please install "\033[0mcoreutils\033[1;31m" first!\033[0m' 1>&2
         exit 1
     fi
     which lsof 1> /dev/null 2> /dev/null
     if [ $? -ne 0 ]; then
-        echo '\033[1;31m"\033[0mlsof\033[1;31m" is missing, please install "\033[0mlsof\033[1;31m" first!\033[0m' 1>&2
+        echo -e '\033[1;31m"\033[0mlsof\033[1;31m" is missing, please install "\033[0mlsof\033[1;31m" first!\033[0m' 1>&2
         exit 1
     fi
     which bsdtar 1> /dev/null 2> /dev/null
     if [ $? -ne 0 ]; then
-        echo '\033[1;31m"\033[0mbsdtar\033[1;31m" is missing, please install "\033[0mlibarchive\033[1;31m" first!\033[0m' 1>&2
+        echo -e '\033[1;31m"\033[0mbsdtar\033[1;31m" is missing, please install "\033[0mlibarchive\033[1;31m" first!\033[0m' 1>&2
         exit 1
     fi
     which mkimage 1> /dev/null 2> /dev/null
     if [ $? -ne 0 ]; then
-        echo '\033[1;31m"\033[0mmkimage\033[1;31m" is missing, please install "\033[0muboot-tools\033[1;31m" first!\033[0m' 1>&2
+        echo -e '\033[1;31m"\033[0mmkimage\033[1;31m" is missing, please install "\033[0muboot-tools\033[1;31m" first!\033[0m' 1>&2
         exit 1
     fi
     which mkfs.ext4 1> /dev/null 2> /dev/null
     if [ $? -ne 0 ]; then
-        echo '\033[1;31m"\033[0mmkfs.ext4\033[1;31m" is missing, please install "\033[0me2fsprogs\033[1;31m" first!\033[0m' 1>&2
+        echo -e '\033[1;31m"\033[0mmkfs.ext4\033[1;31m" is missing, please install "\033[0me2fsprogs\033[1;31m" first!\033[0m' 1>&2
         exit 1
     fi
     which mkfs.btrfs 1> /dev/null 2> /dev/null
     if [ $? -ne 0 ]; then
-        echo '\033[1;31m"\033[0mmkfs.btrfs\033[1;31m" is missing, please install "\033[0mbtrfs-progs\033[1;31m" first!\033[0m' 1>&2
+        echo -e '\033[1;31m"\033[0mmkfs.btrfs\033[1;31m" is missing, please install "\033[0mbtrfs-progs\033[1;31m" first!\033[0m' 1>&2
         exit 1
     fi
     which qemu-arm-static 1> /dev/null 2> /dev/null
     if [ $? -ne 0 ]; then
-        echo '\033[1;31m"\033[0mqemu-arm-static\033[1;31m" is missing, please install "\033[0mqemu-user-static\033[1;31m" first!\033[0m' 1>&2
+        echo -e '\033[1;31m"\033[0mqemu-arm-static\033[1;31m" is missing, please install "\033[0mqemu-user-static\033[1;31m" first!\033[0m' 1>&2
         exit 1
     fi
     if ! [ -f "$DISK" ]; then
-        echo "\033[1;31mPath \"\033[0m${DISK}\033[1;31m\" is not a block device!\033[0m" 1>&2
+        echo -e "\033[1;31mPath \"\033[0m${DISK}\033[1;31m\" is not a block device!\033[0m" 1>&2
         exit 1
     fi
     if ! [ -f "$IMAGE" ]; then
-        echo "\033[1;31mImage path \"\033[0m${IMAGE}\033[1;31m\" does not exist!\033[0m" 1>&2
+        echo -e "\033[1;31mImage path \"\033[0m${IMAGE}\033[1;31m\" does not exist!\033[0m" 1>&2
         exit 1
     fi
     if ! [ -d "$UBOOT" ]; then
-        echo "\033[1;31mUboot path \"\033[0m${UBOOT}\033[1;31m\" is not a directory!\033[0m" 1>&2
+        echo -e "\033[1;31mUboot path \"\033[0m${UBOOT}\033[1;31m\" is not a directory!\033[0m" 1>&2
         exit 1
     fi
     if ! [ -f "$UBOOT/MLO" ]; then
-        echo "\033[1;31mUboot path \"\033[0m${UBOOT}/MLO\033[1;31m\" does not exist!\033[0m" 1>&2
+        echo -e "\033[1;31mUboot path \"\033[0m${UBOOT}/MLO\033[1;31m\" does not exist!\033[0m" 1>&2
         exit 1
     fi
     if ! [ -f "$UBOOT/u-boot.img" ]; then
-        echo "\033[1;31mUboot path \"\033[0m${UBOOT}/u-boot.img\033[1;31m\" does not exist!\033[0m" 1>&2
+        echo -e "\033[1;31mUboot path \"\033[0m${UBOOT}/u-boot.img\033[1;31m\" does not exist!\033[0m" 1>&2
         exit 1
     fi
     if ! [ -f "$(pwd)/config.sh" ]; then
-        echo "\033[1;31mPath \"\033[0m${pwd}/config.sh\033[1;31m\" does not exist!\033[0m" 1>&2
+        echo -e "\033[1;31mPath \"\033[0m${pwd}/config.sh\033[1;31m\" does not exist!\033[0m" 1>&2
         exit 1
     fi
 }
@@ -120,7 +120,7 @@ exec "dd if=/dev/zero of=${DISK} bs=1M count=8"
 
 total=$(fdisk -l ${DISK}|grep 'Disk'|grep 'sectors'|awk '{print $7}')
 if [ $? -ne 0 ]; then
-    echo "Could not get disk sector size!" 1>&2
+    echo -e "\033[1;31Could not get disk sector size!\033[0m" 1>&2
     cleanup 1
 fi
 size_root=$((total - 16781312))
@@ -190,10 +190,10 @@ printf "bash ${SYSCONFIG_DIR}/bin/relink ${SYSCONFIG_DIR} /\n" >> "${ROOT}/root/
 printf "bash ${SYSCONFIG_DIR}/bin/syslink\n" >> "${ROOT}/root/init.sh"
 printf 'pacman -S dnsmasq btrfs-progs pacman-contrib zstd --noconfirm\n' >> "${ROOT}/root/init.sh"
 printf 'mount -o rw,remount /\n' >> "${ROOT}/root/init.sh"
-printf 'systemctl mask rescue.service\n' >> "${ROOT}/root/init.sh"
-printf 'systemctl mask emergency.service\n' >> "${ROOT}/root/init.sh"
-printf 'systemctl mask emergency.target\n' >> "${ROOT}/root/init.sh"
-printf 'systemctl disable systemd-resolved\n' >> "${ROOT}/root/init.sh"
+printf 'systemctl mask rescue.service > /dev/null\n' >> "${ROOT}/root/init.sh"
+printf 'systemctl mask emergency.service > /dev/null\n' >> "${ROOT}/root/init.sh"
+printf 'systemctl mask emergency.target > /dev/null\n' >> "${ROOT}/root/init.sh"
+printf 'systemctl disable systemd-resolved > /dev/null\n' >> "${ROOT}/root/init.sh"
 printf 'rm /etc/systemd/system/multi-user.target.wants/systemd-resolved.service 2> /dev/null\n' >> "${ROOT}/root/init.sh"
 printf 'rm /etc/systemd/system/dbus-org.freedesktop.resolve1.service 2> /dev/null\n' >> "${ROOT}/root/init.sh"
 printf 'systemctl enable systemd-networkd.service > /dev/null\n' >> "${ROOT}/root/init.sh"
@@ -203,7 +203,8 @@ printf 'systemctl enable fstrim.timer > /dev/null\n' >> "${ROOT}/root/init.sh"
 printf 'ssh-keygen -t ed25519 -f /etc/ssh/ssh_host_ed25519_key -N "" < /dev/null > /dev/null\n' >> "${ROOT}/root/init.sh"
 printf 'ssh-keygen -t rsa -b 4096 -f /etc/ssh/ssh_host_rsa_key -N "" < /dev/null > /dev/null\n' >> "${ROOT}/root/init.sh"
 printf 'chmod 400 /etc/ssh/*_key\n' >> "${ROOT}/root/init.sh"
-if [ -f $SCRIPT ]; then
+if [ ! -z "$SCRIPT" ] && [ -f $SCRIPT ]; then
+    print "Addding addditional script \"${SCRIPT}\"..."
     cp "$SCRIPT" "${ROOT}/root/extra.sh"
     chmod 500 "${ROOT}/root/extra.sh"
     printf 'bash /root/extra.sh\n' >> "${ROOT}/root/init.sh"
@@ -221,7 +222,7 @@ export ROOT
 export SYSCONFIG
 source "$(pwd)/config.sh"
 if [ $? -ne 0 ]; then
-    echo '\033[1;31mSourcing "\033[0mconfig.sh\033[1;31m" failed!\033[0m' 1>&2
+    echo -e '\033[1;31mSourcing "\033[0mconfig.sh\033[1;31m" failed!\033[0m' 1>&2
     cleanup 1
 fi
 
@@ -243,7 +244,7 @@ echo ':arm:M::\x7fELF\x01\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x2
 print "Running chroot init script..."
 chroot "${ROOT}" /root/init.sh
 if [ $? -ne 0 ]; then
-    echo "\033[1;33mChroot non-zero exit code!\033[0m"
+    echo -e "\033[1;33mChroot non-zero exit code!\033[0m"
 fi
 
 print "Chroot Done, cleaning up..."

@@ -26,7 +26,7 @@ The `UbootRepo` directory is a modified Uboot build by @NitroProp [https://githu
 An example that should work "Out-Of-The-Box" would be `sudo bash install.sh ArchLinuxARM-am33x-latest.tar.gz ./UbootRepo/u-boot /dev/mmcblk0`
 This example assumes the SD card you'd be using is at `/dev/mmcblk0`.
 
-The last command line argument `[source script]` is a path to a script file that is executed in the +*Context of the Beagle (ARM) before completion**
+The last command line argument `[source script]` is a path to a script file that is executed in the **Context of the Beagle (ARM) before completion**
 which allows you to install other programs, enable systemd units, etc. This optional argument is ignored if the path suggested does not exist, or is not a file.
 
 ## Install requirements
