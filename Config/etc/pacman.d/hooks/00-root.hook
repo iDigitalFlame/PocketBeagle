@@ -1,0 +1,11 @@
+[Trigger]
+Type        = Package
+Target      = *
+Operation   = Remove
+Operation   = Install
+Operation   = Upgrade
+
+[Action]
+When        = PreTransaction
+Exec        = /usr/bin/mount -o remount,rw /
+Description = Mounting / as read/write..

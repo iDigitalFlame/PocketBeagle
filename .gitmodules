@@ -1,0 +1,3 @@
+[submodule "UbootRepo"]
+	path = UbootRepo
+	url = https://github.com/NitroProp/PocketBeagle-ARCH-ReARMed

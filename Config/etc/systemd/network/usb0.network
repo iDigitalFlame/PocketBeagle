@@ -1,0 +1,9 @@
+[Match]
+Type    = gadget
+
+[Network]
+DNS     = 10.1.10.2
+Address = 10.1.10.1/30
+
+[Route]
+Gateway = 10.1.10.1
