@@ -12,9 +12,10 @@ You can use the `install.sh` script to install and configure an ArchLinux instal
 
 The install script requires a valid ArchLinux tar blob, which can be downloaded [here](http://os.archlinuxarm.org/os/ArchLinuxARM-am33x-latest.tar.gz)
 or by issuing the command:
-`wget http://os.archlinuxarm.org/os/ArchLinuxARM-am33x-latest.tar.gz`
--or-
-`curl -o ArchLinuxARM-am33x-latest.tar.gz http://os.archlinuxarm.org/os/ArchLinuxARM-am33x-latest.tar.gz`
+
+- `wget http://os.archlinuxarm.org/os/ArchLinuxARM-am33x-latest.tar.gz`
+- or
+- `curl -o ArchLinuxARM-am33x-latest.tar.gz http://os.archlinuxarm.org/os/ArchLinuxARM-am33x-latest.tar.gz`
 
 The `UbootRepo` directory is a modified Uboot build by @NitroProp [https://github.com/NitroProp/PocketBeagle-ARCH-ReARMed](https://github.com/NitroProp/PocketBeagle-ARCH-ReARMed) (thanks!) that is used for booting. (duh).
 
