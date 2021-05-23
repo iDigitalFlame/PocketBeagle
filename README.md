@@ -11,13 +11,16 @@ You can use the `install.sh` script to install and configure an ArchLinux instal
 - BTRFS Cache partition
 
 The install script requires a valid ArchLinux tar blob, which can be downloaded [here](http://os.archlinuxarm.org/os/ArchLinuxARM-am33x-latest.tar.gz)
-or by issuing the command `wget http://os.archlinuxarm.org/os/ArchLinuxARM-am33x-latest.tar.gz` or `curl -o ArchLinuxARM-am33x-latest.tar.gz http://os.archlinuxarm.org/os/ArchLinuxARM-am33x-latest.tar.gz`.
+or by issuing the command:
+`wget http://os.archlinuxarm.org/os/ArchLinuxARM-am33x-latest.tar.gz`
+ -or-
+ `curl -o ArchLinuxARM-am33x-latest.tar.gz http://os.archlinuxarm.org/os/ArchLinuxARM-am33x-latest.tar.gz`
 
-The `UbootRepo` is a modified Uboot build by @NitroProp [https://github.com/NitroProp/PocketBeagle-ARCH-ReARMed](https://github.com/NitroProp/PocketBeagle-ARCH-ReARMed) that is used for booting. (duh).
+The `UbootRepo` directory is a modified Uboot build by @NitroProp [https://github.com/NitroProp/PocketBeagle-ARCH-ReARMed](https://github.com/NitroProp/PocketBeagle-ARCH-ReARMed) (thanks!) that is used for booting. (duh).
 
 ## Command Line Arguments
 
-`sudo bash install.sh <tar image> <uboot dir> <disk> [source script]>`
+`sudo bash install.sh <tar image> <uboot dir> <disk> [source script]`
 
 An example that should work "Out-Of-The-Box" would be `sudo bash install.sh ArchLinuxARM-am33x-latest.tar.gz ./UbootRepo/u-boot /dev/mmcblk0`
 This example assumes the SD card you'd be using is at `/dev/mmcblk0`.
