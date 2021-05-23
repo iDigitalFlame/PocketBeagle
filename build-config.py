@@ -13,7 +13,12 @@ class Builder(object):
         self.files = dict()
 
     def __str__(self):
-        pass
+        b = StringIO()
+        self.write(b)
+        b.close()
+        s = b.getvalue()
+        del b
+        return s
 
     def build(self, dir):
         if not isdir(dir):
@@ -46,7 +51,6 @@ class Builder(object):
         i = 0
         o = StringIO()
         e = [f'/usr/bin/printf "" > "${{ROOT}}${{SYSCONFIG_DIR}}{b}"']
-        # need to index
         for c in r:
             if i >= 80:
                 e.append(

@@ -105,8 +105,8 @@ cleanup() {
     sync
     umount /proc/sys/fs/binfmt_misc 2> /dev/null
     umount "${ROOT}/var" 2> /dev/null
-    umount "${ROOT}" #2> /dev/null
-    rmdir "${ROOT}" #2> /dev/null
+    umount "${ROOT}" 2> /dev/null
+    rmdir "${ROOT}" 2> /dev/null
     if [ $# -ne 1 ]; then
         exit 0
     fi
@@ -242,10 +242,8 @@ exec "cp $(which qemu-arm-static) ${ROOT}/usr/bin/qemu-arm-static"
 echo ':arm:M::\x7fELF\x01\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x28\x00:\xff\xff\xff\xff\xff\xff\xff\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff:/usr/bin/qemu-arm-static:' > /proc/sys/fs/binfmt_misc/register 2> /dev/null
 
 print "Running chroot init script..."
-chroot "${ROOT}" /root/init.sh
-if [ $? -ne 0 ]; then
-    echo -e "\033[1;33mChroot non-zero exit code!\033[0m"
-fi
+chroot "${ROOT}" "/root/init.sh"
+[ $? -ne 0 ] && echo -e "\033[1;33mChroot non-zero exit code!\033[0m"
 
 print "Chroot Done, cleaning up..."
 rm "${ROOT}/root/init.sh" 2> /dev/null
