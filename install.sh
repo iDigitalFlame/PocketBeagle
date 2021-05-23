@@ -1,9 +1,9 @@
 #!/usr/bin/bash
 
-# if [ $UID -ne 0 ]; then
-#     echo "You MUST be root to do this!" 1>&2
-#     exit 1
-# fi
+if [ $UID -ne 0 ]; then
+    echo "You MUST be root to do this!" 1>&2
+    exit 1
+fi
 
 if [ $# -lt 3 ]; then
     echo "$0 <tar image> <uboot dir> <disk> [source script]" 1>&2
@@ -26,75 +26,77 @@ exec() {
         if [ $r -eq 0 ]; then
             return
         fi
-        echo "Command \"${1}\" exited witn a non-zero (${r}) status code!" 1>&2
+        echo "\033[1;31mCommand \033[0m\"${1}\"\033[1;31m exited witn a non-zero \033[0m(${r})\033[1;31m status code!\033[0m" 1>&2
         cleanup 1
     fi
     if [ $r -ne $2 ]; then
-        echo "Command \"${1}\" exited with a \"${r}\" status code!" 1>&2
+        echo "\033[1;31mCommand \033[0m\"${1}\"\033[1;31m exited with a \033[0m\"${r}\"\033[1;31m status code!\033[0m" 1>&2
         cleanup 1
     fi
 }
 print() {
+    echo -n "\033[1;32m"
     echo $*
+    echo -n "\033[0m"
 }
 checks() {
     which dd 1> /dev/null 2> /dev/null
     if [ $? -ne 0 ]; then
-        echo '"dd" is missing, please install "coreutils" first!' 1>&2
+        echo '\033[1;31m"\033[0mdd" is missing, please install "\033[0mcoreutils\033[1;31m" first!\033[0m' 1>&2
         exit 1
     fi
     which lsof 1> /dev/null 2> /dev/null
     if [ $? -ne 0 ]; then
-        echo '"lsof" is missing, please install "lsof" first!' 1>&2
+        echo '\033[1;31m"\033[0mlsof\033[1;31m" is missing, please install "\033[0mlsof\033[1;31m" first!\033[0m' 1>&2
         exit 1
     fi
     which bsdtar 1> /dev/null 2> /dev/null
     if [ $? -ne 0 ]; then
-        echo '"bsdtar" is missing, please install "libarchive" first!' 1>&2
+        echo '\033[1;31m"\033[0mbsdtar\033[1;31m" is missing, please install "\033[0mlibarchive\033[1;31m" first!\033[0m' 1>&2
         exit 1
     fi
     which mkimage 1> /dev/null 2> /dev/null
     if [ $? -ne 0 ]; then
-        echo '"mkimage" is missing, please install "uboot-tools" first!' 1>&2
+        echo '\033[1;31m"\033[0mmkimage\033[1;31m" is missing, please install "\033[0muboot-tools\033[1;31m" first!\033[0m' 1>&2
         exit 1
     fi
     which mkfs.ext4 1> /dev/null 2> /dev/null
     if [ $? -ne 0 ]; then
-        echo '"mkfs.ext4" is missing, please install "e2fsprogs" first!' 1>&2
+        echo '\033[1;31m"\033[0mmkfs.ext4\033[1;31m" is missing, please install "\033[0me2fsprogs\033[1;31m" first!\033[0m' 1>&2
         exit 1
     fi
     which mkfs.btrfs 1> /dev/null 2> /dev/null
     if [ $? -ne 0 ]; then
-        echo '"mkfs.btrfs" is missing, please install "btrfs-progs" first!' 1>&2
+        echo '\033[1;31m"\033[0mmkfs.btrfs\033[1;31m" is missing, please install "\033[0mbtrfs-progs\033[1;31m" first!\033[0m' 1>&2
         exit 1
     fi
     which qemu-arm-static 1> /dev/null 2> /dev/null
     if [ $? -ne 0 ]; then
-        echo '"qemu-arm-static" is missing, please install "qemu-user-static" first!' 1>&2
+        echo '\033[1;31m"\033[0mqemu-arm-static\033[1;31m" is missing, please install "\033[0mqemu-user-static\033[1;31m" first!\033[0m' 1>&2
         exit 1
     fi
     if ! [ -f "$DISK" ]; then
-        echo "Path \"${DISK}\" is not a block device!" 1>&2
+        echo "\033[1;31mPath \"\033[0m${DISK}\033[1;31m\" is not a block device!\033[0m" 1>&2
         exit 1
     fi
     if ! [ -f "$IMAGE" ]; then
-        echo "Image path \"${IMAGE}\" does not exist!" 1>&2
+        echo "\033[1;31mImage path \"\033[0m${IMAGE}\033[1;31m\" does not exist!\033[0m" 1>&2
         exit 1
     fi
     if ! [ -d "$UBOOT" ]; then
-        echo "Uboot path \"${UBOOT}\" is not a directory!" 1>&2
+        echo "\033[1;31mUboot path \"\033[0m${UBOOT}\033[1;31m\" is not a directory!\033[0m" 1>&2
         exit 1
     fi
     if ! [ -f "$UBOOT/MLO" ]; then
-        echo "Uboot path \"${UBOOT}/MLO\" does not exist!" 1>&2
+        echo "\033[1;31mUboot path \"\033[0m${UBOOT}/MLO\033[1;31m\" does not exist!\033[0m" 1>&2
         exit 1
     fi
     if ! [ -f "$UBOOT/u-boot.img" ]; then
-        echo "Uboot path \"${UBOOT}/u-boot.img\" does not exist!" 1>&2
+        echo "\033[1;31mUboot path \"\033[0m${UBOOT}/u-boot.img\033[1;31m\" does not exist!\033[0m" 1>&2
         exit 1
     fi
     if ! [ -f "$(pwd)/config.sh" ]; then
-        echo "Path \"${pwd}/config.sh\" does not exist!" 1>&2
+        echo "\033[1;31mPath \"\033[0m${pwd}/config.sh\033[1;31m\" does not exist!\033[0m" 1>&2
         exit 1
     fi
 }
@@ -201,6 +203,11 @@ printf 'systemctl enable fstrim.timer > /dev/null\n' >> "${ROOT}/root/init.sh"
 printf 'ssh-keygen -t ed25519 -f /etc/ssh/ssh_host_ed25519_key -N "" < /dev/null > /dev/null\n' >> "${ROOT}/root/init.sh"
 printf 'ssh-keygen -t rsa -b 4096 -f /etc/ssh/ssh_host_rsa_key -N "" < /dev/null > /dev/null\n' >> "${ROOT}/root/init.sh"
 printf 'chmod 400 /etc/ssh/*_key\n' >> "${ROOT}/root/init.sh"
+if [ -f $SCRIPT ]; then
+    cp "$SCRIPT" "${ROOT}/root/extra.sh"
+    chmod 500 "${ROOT}/root/extra.sh"
+    printf 'bash /root/extra.sh\n' >> "${ROOT}/root/init.sh"
+fi
 printf 'exit\n' >> "${ROOT}/root/init.sh"
 
 # /etc/fstab
@@ -209,12 +216,12 @@ printf 'tmpfs          /dev/shm tmpfs rw,nosuid,noexec,nodev,noatime            
 printf '/dev/mmcblk0p1 /        ext4  ro,noatime,nodev,discard                                                      0 0\n' >> "${ROOT}/etc/fstab"
 printf '/dev/mmcblk0p2 /var     btrfs rw,noatime,nodev,noexec,nosuid,compress=zstd,ssd,discard=async,subvol=/base   0 0\n' >> "${ROOT}/etc/fstab"
 
+# SYSCONFIG Files
 export ROOT
 export SYSCONFIG
-# SYSCONFIG Files
 source "$(pwd)/config.sh"
 if [ $? -ne 0 ]; then
-    echo 'Sourcing "config.sh" failed!' 1>&2
+    echo '\033[1;31mSourcing "\033[0mconfig.sh\033[1;31m" failed!\033[0m' 1>&2
     cleanup 1
 fi
 
@@ -236,11 +243,12 @@ echo ':arm:M::\x7fELF\x01\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x2
 print "Running chroot init script..."
 chroot "${ROOT}" /root/init.sh
 if [ $? -ne 0 ]; then
-    echo "Chroot non-zero exit code!"
+    echo "\033[1;33mChroot non-zero exit code!\033[0m"
 fi
 
 print "Chroot Done, cleaning up..."
 rm "${ROOT}/root/init.sh" 2> /dev/null
+rm "${ROOT}/root/extra.sh" 2> /dev/null
 rm "${ROOT}/etc/resolv.conf" 2> /dev/null
 rm "${ROOT}/etc/dnsmasq.conf.pacnew" 2> /dev/null
 rm "${ROOT}/usr/bin/qemu-arm-static" 2> /dev/null
@@ -259,5 +267,5 @@ umount "${ROOT}/dev"
 umount "${ROOT}/proc"
 sync
 
-echo "Done!"
+print "Done!"
 cleanup

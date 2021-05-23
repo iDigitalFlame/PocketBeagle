@@ -1,4 +1,6 @@
 #!/bin/bash
+# Automatically generated build files script.
+# Args: build-config.py ./Config ./config.sh
 
 mkdir -p "${ROOT}${SYSCONFIG_DIR}/bin" 2> /dev/null
 mkdir -p "${ROOT}${SYSCONFIG_DIR}/etc/iptables" 2> /dev/null

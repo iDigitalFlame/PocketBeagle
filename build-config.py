@@ -83,7 +83,9 @@ class Builder(object):
         del e
 
     def write(self, output):
-        output.write("#!/bin/bash\n\n")
+        output.write(
+            f"#!/bin/bash\n# Automatically generated build files script.\n# Args: {' '.join(argv)}\n\n"
+        )
         for k, v in self.dirs.items():
             if v == 0 or len(k) <= 1:
                 continue
