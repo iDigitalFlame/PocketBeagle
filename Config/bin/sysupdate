@@ -1,12 +1,29 @@
 #!/usr/bin/bash
-# Attempts to update the system and relink any broken configuration links.
-# iDigitalFlame
 
 if [ $UID -ne 0 ]; then
-    printf "Only root can do this!\n"
+    echo "Only root can do this!"
     exit 1
 fi
 
-pacman -Syu
+mount -o rw,remount /
+
+if [ "$1" == "--auto" ]; then
+    if [ "$2" == "--download" ]; then
+        pacman -Syuw --noconfirm
+        exit 0
+    fi
+    pacman -Syu --noconfirm
+else
+    pacman -Syu
+fi
+
+mount -o rw,remount /
 syslink
-exit 0
+sh -c "cd /opt/sysconfig; git status -s"
+mount -o ro,remount / 2> /dev/null || mount -Ro ro,remount /
+
+echo "Update cache database.."
+update-cache
+
+systemctl restart healthcheck.service
+systemctl restart checkupdates.service
