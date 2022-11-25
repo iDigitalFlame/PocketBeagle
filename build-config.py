@@ -139,7 +139,10 @@ class Builder(object):
             if isdir(p):
                 self._dir(p, False)
                 continue
-            self._file(p)
+            try:
+                self._file(p)
+            except Exception as err:
+                raise ValueError(f"{p}: {err}") from err
 
 
 if __name__ == "__main__":
