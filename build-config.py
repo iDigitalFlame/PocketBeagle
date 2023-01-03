@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-# Copyright 2021 - 2022 iDigitalFlame
+# Copyright 2021 - 2023 iDigitalFlame
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -56,9 +56,19 @@ class Builder(object):
                 self.dirs[d] = 1
             else:
                 self.dirs[d] += 1
-        r = None
-        with open(path, "r") as f:
-            r = f.read()
+        del d
+        r, k = None, False
+        try:
+            with open(path, "r") as f:
+                r = f.read()
+        except UnicodeDecodeError:
+            y = StringIO()
+            with open(path, "rb") as f:
+                for c in f.read():
+                    y.write(f"\\x{hex(c).upper()[2:].zfill(2)}")
+            r, k = y.getvalue(), True
+            y.close()
+            del y
         if not isinstance(r, str) or len(r) == 0:
             self.files[b] = f'/usr/bin/printf "" > "${{ROOT}}${{SYSCONFIG_DIR}}{b}"'
             return
@@ -80,7 +90,7 @@ class Builder(object):
             elif c == "\t":
                 o.write("\\t")
                 i += 1
-            elif c == "\\":
+            elif c == "\\" and not k:
                 o.write("\\\\")
                 i += 1
             elif c == "'":
@@ -96,9 +106,9 @@ class Builder(object):
             e.append(
                 f"/usr/bin/printf '{o.getvalue()}' >> \"${{ROOT}}${{SYSCONFIG_DIR}}{b}\""
             )
-        del o
+        del o, k, r
         self.files[b] = "\n".join(e)
-        del e
+        del e, b
 
     def write(self, output):
         output.write(
@@ -160,5 +170,6 @@ if __name__ == "__main__":
         b.print(file)
     except Exception as err:
         print(f"{err}", file=stderr)
+        raise err
         exit(1)
     exit(0)

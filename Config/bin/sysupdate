@@ -1,7 +1,17 @@
 #!/usr/bin/bash
 
-if [ $UID -ne 0 ]; then
+if ! [ "$UID" = "0" ]; then
     echo "Only root can do this!"
+    exit 1
+fi
+
+source "/etc/sysconfig.conf" 2> /dev/null
+if [ -z "$SYSCONFIG" ]; then
+    echo "Could not find the System Configuration directory!"
+    exit 1
+fi
+if ! [ -d "$SYSCONFIG" ]; then
+    printf "System Configuration directory \"%s\" does not exist!\n" "$SYSCONFIG"
     exit 1
 fi
 
@@ -19,11 +29,4 @@ fi
 
 mount -o rw,remount /
 syslink
-sh -c "cd /opt/sysconfig; git status -s"
 mount -o ro,remount / 2> /dev/null || mount -Ro ro,remount /
-
-echo "Update cache database.."
-update-cache
-
-systemctl restart healthcheck.service
-systemctl restart checkupdates.service
