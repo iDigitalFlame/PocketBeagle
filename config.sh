@@ -195,7 +195,7 @@ mkdir -p "${ROOT}${SYSCONFIG_DIR}/etc" 2> /dev/null
 
 # Create file "/etc/profile.d/umask.sh"
 /usr/bin/printf "" > "${ROOT}${SYSCONFIG_DIR}/etc/profile.d/umask.sh"
-/usr/bin/printf '#!/usr/bin/bash\n\numask 027\n' >> "${ROOT}${SYSCONFIG_DIR}/etc/profile.d/umask.sh"
+/usr/bin/printf '#!/usr/bin/bash\n\numask 0027\n' >> "${ROOT}${SYSCONFIG_DIR}/etc/profile.d/umask.sh"
 
 # Create file "/etc/profile.d/z_system_status.sh"
 /usr/bin/printf "" > "${ROOT}${SYSCONFIG_DIR}/etc/profile.d/z_system_status.sh"
