@@ -239,7 +239,7 @@ printf 'systemctl enable systemd-networkd.service > /dev/null\n' >> "${ROOT}/roo
 printf 'systemctl enable systemd-timesyncd.service > /dev/null\n' >> "${ROOT}/root/init.sh"
 printf 'systemctl enable dnsmasq.service > /dev/null\n' >> "${ROOT}/root/init.sh"
 printf 'systemctl enable fstrim.timer > /dev/null\n' >> "${ROOT}/root/init.sh"
-printf 'pacman -Rsc $(pacman -Qtdq) --noconfirm\n' >> "${ROOT}/root/init.sh"
+printf 'pacman -Rsc $(pacman -Qtdq) --noconfirm 2> /dev/null\n' >> "${ROOT}/root/init.sh"
 printf 'mount -o rw,remount /\n' >> "${ROOT}/root/init.sh"
 printf 'ssh-keygen -t ed25519 -f /etc/ssh/ssh_host_ed25519_key -N "" < /dev/null > /dev/null\n' >> "${ROOT}/root/init.sh"
 printf 'ssh-keygen -t rsa -b 4096 -f /etc/ssh/ssh_host_rsa_key -N "" < /dev/null > /dev/null\n' >> "${ROOT}/root/init.sh"
@@ -304,7 +304,7 @@ awk '$5 > 2000' "${ROOT}/etc/ssh/moduli" > "${ROOT}/etc/ssh/moduli"
 printf 'nameserver 10.1.10.2\nsearch beagle.usb\n' > "${ROOT}/etc/resolv.conf"
 chmod 0400 "${ROOT}/etc/ssh/moduli"
 chmod 0444 "${ROOT}/etc/resolv.conf"
-find "${ROOT}" -type f -name "*.pacnew" -delete
+find "${ROOT}" -type f -name "*.pacnew" -delete 2> /dev/null
 
 lsof -n | grep "$ROOT" | awk '{print $2}' | xargs kill -9
 sleep 5
