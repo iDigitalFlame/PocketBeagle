@@ -243,7 +243,7 @@ printf 'pacman -Rsc $(pacman -Qtdq) --noconfirm 2> /dev/null\n' >> "${ROOT}/root
 printf 'mount -o rw,remount /\n' >> "${ROOT}/root/init.sh"
 printf 'ssh-keygen -t ed25519 -f /etc/ssh/ssh_host_ed25519_key -N "" < /dev/null > /dev/null\n' >> "${ROOT}/root/init.sh"
 printf 'ssh-keygen -t rsa -b 4096 -f /etc/ssh/ssh_host_rsa_key -N "" < /dev/null > /dev/null\n' >> "${ROOT}/root/init.sh"
-printf 'ssh-keygen -A\n' >> "${ROOT}/root/init.sh"
+printf 'ssh-keygen -A > /dev/null\n' >> "${ROOT}/root/init.sh"
 printf 'chmod 400 /etc/ssh/*_key\n' >> "${ROOT}/root/init.sh"
 printf 'userdel -rf alarm 2> /dev/null\n' >> "${ROOT}/root/init.sh"
 
@@ -283,7 +283,7 @@ exec "mount -o bind /dev ${ROOT}/dev"
 exec "mount -o bind /sys ${ROOT}/sys"
 exec "mount -o bind /proc ${ROOT}/proc"
 exec "cp $(which qemu-arm-static) ${ROOT}/usr/bin/qemu-arm-static"
-printf ':arm:M::\x7fELF\x01\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x03\x00\x28\x00:\xff\xff\xff\xff\xff\xff\xff\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff:/usr/bin/qemu-arm-static:\n' > /proc/sys/fs/binfmt_misc/register 2> /dev/null
+printf ':arm:M:18:\x28:\xFF:/usr/bin/qemu-arm-static:\n' > /proc/sys/fs/binfmt_misc/register 2> /dev/null
 
 print "Running chroot init script.."
 if ! chroot "${ROOT}" "/root/init.sh"; then
@@ -313,6 +313,7 @@ umount "${ROOT}/dev"
 umount "${ROOT}/proc"
 sync
 
+printf '-1\n' > /proc/sys/fs/binfmt_misc/status 2> /dev/null
 printf "\033[1;32mPlease change the \033[0mroot\033[1;32m user password on first login!!\033[0m\n"
 print "Done!"
 cleanup
