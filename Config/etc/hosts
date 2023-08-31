@@ -1,5 +1,4 @@
 ::1         localhost.local     localhost
 127.0.0.1   localhost.local     localhost
 10.1.10.1   beagle.usb          beagle
-10.1.10.1   beagle.usb          beagle
 10.1.10.2   host.usb            host

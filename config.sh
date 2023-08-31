@@ -436,8 +436,8 @@ mkdir -p "${ROOT}${SYSCONFIG_DIR}/etc" 2> /dev/null
 # Create file "/etc/hosts"
 /usr/bin/printf "" > "${ROOT}${SYSCONFIG_DIR}/etc/hosts"
 /usr/bin/printf '::1         localhost.local     localhost\n127.0.0.1   localhost.local     local' >> "${ROOT}${SYSCONFIG_DIR}/etc/hosts"
-/usr/bin/printf 'host\n10.1.10.1   beagle.usb          beagle\n10.1.10.1   beagle.usb          be' >> "${ROOT}${SYSCONFIG_DIR}/etc/hosts"
-/usr/bin/printf 'agle\n10.1.10.2   host.usb            host\n' >> "${ROOT}${SYSCONFIG_DIR}/etc/hosts"
+/usr/bin/printf 'host\n10.1.10.1   beagle.usb          beagle\n10.1.10.2   host.usb            ho' >> "${ROOT}${SYSCONFIG_DIR}/etc/hosts"
+/usr/bin/printf 'st\n' >> "${ROOT}${SYSCONFIG_DIR}/etc/hosts"
 
 # Create file "/etc/locale.conf"
 /usr/bin/printf "" > "${ROOT}${SYSCONFIG_DIR}/etc/locale.conf"
