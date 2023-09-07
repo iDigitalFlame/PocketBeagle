@@ -121,6 +121,7 @@ checks() {
 cleanup() {
     print "Performing cleanup..."
     sync
+    printf '-1\n' > /proc/sys/fs/binfmt_misc/status 2> /dev/null
     umount "/proc/sys/fs/binfmt_misc" 2> /dev/null
     umount "${ROOT}/var" 2> /dev/null
     umount "${ROOT}" 2> /dev/null
@@ -142,14 +143,14 @@ exec "dd if=/dev/zero of=${DISK} bs=1M count=8"
 
 total=$(fdisk -l "${DISK}" | grep "Disk" | grep "sectors" | awk '{print $7}')
 if [ $? -ne 0 ]; then
-    printf "\033[1;31Could not get disk sector size!\033[0m\n" 1>&2
+    printf "\033[1;31mCould not get disk sector size!\033[0m\n" 1>&2
     cleanup 1
 fi
 
 size_root=$((total - 16781312))
 size_cache=$((size_root + 16777217))
 
-print "Partitioning disk ${DISK}.."
+printf "\033[1;32mPartitioning disk \033[0m\"${DISK}\"\033[1;32m..\033[0m\n"
 printf "o\nn\np\n1\n4096\n%d\ny\nn\np\n2\n%d\n%d\ny\nw\n" "$size_root" "$((size_root + 1))" "$size_cache" | exec "fdisk ${DISK}"
 
 print "Creating and formatting partitions.."
@@ -165,7 +166,7 @@ exec "btrfs subvolume create ${ROOT}/var/base"
 exec "umount ${ROOT}/var"
 exec "mount -t btrfs -o rw,noatime,nodev,noexec,nosuid,space_cache=v2,compress=zstd,ssd,discard=async,subvol=/base ${DISK}p2 ${ROOT}/var"
 
-print "Extracting ${IMAGE} to disk..."
+printf "\033[1;32mExtracting \033[0m\"${IMAGE}\"\033[1;32m to disk..\033[0m\n"
 exec "bsdtar -xpf \"${IMAGE}\" -C ${ROOT}"
 sync
 
@@ -180,12 +181,17 @@ exec "dd if=${ROOT}/boot/MLO of=${DISK} count=1 seek=1 conv=notrunc bs=128k"
 exec "dd if=${ROOT}/boot/u-boot.img of=${DISK} count=2 seek=1 conv=notrunc bs=384k"
 sync
 
-mac_addr=$(printf '%x%x:%x%x:%x%x' $((RANDOM % 10)) $((RANDOM % 10)) $((RANDOM % 10)) $((RANDOM % 10)) $((RANDOM % 10)) $((RANDOM % 10)))
+mac=$(printf '%x%x:%x%x:%x%x' $((RANDOM % 10)) $((RANDOM % 10)) $((RANDOM % 10)) $((RANDOM % 10)) $((RANDOM % 10)) $((RANDOM % 10)))
+
+mkdir "${ROOT}${SYSCONFIG_DIR}/etc/modprobe.d"
+printf "options g_ether host_addr=be:ef:ed:${mac} dev_addr=${mac}\n" > "${ROOT}${SYSCONFIG_DIR}/etc/modprobe.d/gadget.conf"
+
+# PocketBeagle console baud rate is always 115200 for some reason.
 printf 'if test -n ${distro_bootpart}; then setenv bootpart ${distro_bootpart}; ' > "${ROOT}/boot/boot.txt"
 printf 'else setenv bootpart 1; fi\npart uuid ${devtype} ${devnum}:${bootpart} uuid\n\n' >> "${ROOT}/boot/boot.txt"
 printf 'setenv bootargs "console=tty0 console=${console} root=PARTUUID=${uuid} rootwait' >> "${ROOT}/boot/boot.txt"
-printf ' ro quiet loglevel=2 audit=0 rd.systemd.show_status=auto rd.udev.log_priority=2 modules-load=dwc2,g_ether ' >> "${ROOT}/boot/boot.txt"
-printf "ipv6.disable=1 g_ether.host_addr=be:ef:ed:${mac_addr} g_ether.dev_addr=${mac_addr}\"" >> "${ROOT}/boot/boot.txt"
+printf ' ro quiet selinux=0 audit=0 loglevel=2 rd.systemd.show_status=auto rd.udev.log_priority=2 ipv6.disable=1 ' >> "${ROOT}/boot/boot.txt"
+printf "modules-load=dwc2,g_ether g_ether.host_addr=be:ef:ed:${mac} g_ether.dev_addr=${mac}\"" >> "${ROOT}/boot/boot.txt"
 printf '\n\nif load ${devtype} ${devnum}:${bootpart} ${kernel_addr_r} /boot/zImage; then\n  gpio set 54\n' >> "${ROOT}/boot/boot.txt"
 printf '  echo fdt: ${fdtfile}\n  if load ${devtype} ${devnum}:${bootpart} ${fdt_addr_r} /boot/dtbs/${fdtfile};' >> "${ROOT}/boot/boot.txt"
 printf ' then\n    gpio set 55\n    if load ${devtype} ${devnum}:${bootpart} ${ramdisk_addr_r} ' >> "${ROOT}/boot/boot.txt"
@@ -195,6 +201,8 @@ printf '      bootz ${kernel_addr_r} - ${fdt_addr_r};\n    fi;\n  fi;\nfi\n' >> 
 exec "mkimage -A arm -O linux -T script -C none -n 'U-Boot boot script' -d ${ROOT}/boot/boot.txt ${ROOT}/boot/boot.scr"
 
 print "Preparing supplimantary files.."
+rm "${ROOT}"/etc/systemd/network/*.network
+
 # Fix DNS Config issue
 rm "${ROOT}/etc/resolv.conf"
 cp -fL "/etc/resolv.conf" "${ROOT}/etc/resolv.conf"
@@ -248,7 +256,7 @@ printf 'chmod 400 /etc/ssh/*_key\n' >> "${ROOT}/root/init.sh"
 printf 'userdel -rf alarm 2> /dev/null\n' >> "${ROOT}/root/init.sh"
 
 if [ -n "$SCRIPT" ] && [ -f "$SCRIPT" ]; then
-    print "Addding addditional script \"${SCRIPT}\".."
+    printf "\033[1;32mAddding addditional script \033[0m\"${SCRIPT}\"\033[1;32m..\033[0m\n"
     cp "$SCRIPT" "${ROOT}/root/extra.sh"
     chmod 500 "${ROOT}/root/extra.sh"
     printf 'bash /root/extra.sh\n' >> "${ROOT}/root/init.sh"
@@ -276,7 +284,7 @@ chmod 0500 "${ROOT}/root/init.sh"
 chmod 0400 "${ROOT}/boot/boot.txt"
 chmod 0444 "${ROOT}/boot/boot.scr"
 chmod 0444 "${ROOT}/etc/sysconfig.conf"
-chmod 0555 -R "${ROOT}${SYSCONFIG_DIR}/bin"
+chmod -R 0555 "${ROOT}${SYSCONFIG_DIR}/bin"
 
 print "Preperaring to chroot into \"${ROOT}\".."
 exec "mount -o bind /dev ${ROOT}/dev"
@@ -301,7 +309,7 @@ rm "${ROOT}/usr/bin/qemu-arm-static" 2> /dev/null
 rm "${ROOT}/etc/systemd/network/eth0.network" 2> /dev/null
 
 awk '$5 > 2000' "${ROOT}/etc/ssh/moduli" > "${ROOT}/etc/ssh/moduli"
-printf 'nameserver 10.1.10.2\nsearch beagle.usb\n' > "${ROOT}/etc/resolv.conf"
+printf 'nameserver 10.1.10.1\nsearch beagle.usb\n' > "${ROOT}/etc/resolv.conf"
 chmod 0400 "${ROOT}/etc/ssh/moduli"
 chmod 0444 "${ROOT}/etc/resolv.conf"
 find "${ROOT}" -type f -name "*.pacnew" -delete 2> /dev/null
@@ -313,7 +321,6 @@ umount "${ROOT}/dev"
 umount "${ROOT}/proc"
 sync
 
-printf '-1\n' > /proc/sys/fs/binfmt_misc/status 2> /dev/null
 printf "\033[1;32mPlease change the \033[0mroot\033[1;32m user password on first login!!\033[0m\n"
 print "Done!"
 cleanup

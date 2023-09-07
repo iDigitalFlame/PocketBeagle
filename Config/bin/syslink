@@ -34,6 +34,7 @@ find "$SYSCONFIG" -type d -exec chmod 0555 {} \;
 chmod -R 0555 "${SYSCONFIG}/bin"
 chmod -R 0555 "${SYSCONFIG}/etc/profile.d"
 chmod -R 0500 "${SYSCONFIG}/etc/syscheck.d"
+chmod -R 0550 "${SYSCONFIG}/etc/modprobe.d"
 
 chmod 0555 "${SYSCONFIG}/etc/ssh"
 chmod 0500 "${SYSCONFIG}/etc/sysctl.d"
@@ -79,13 +80,13 @@ chmod 0444 "/etc/sysconfig.conf"
 chmod 0444 "/etc/ssh/ssh_config"
 chmod 0400 "/etc/mkinitcpio.conf"
 
-chown root:root -R "/etc/systemd"
-chown root:root -R "/etc/iptables"
-chown root:root -R "/etc/pacman.d"
-chown root:root -R "/etc/security"
-chown root:root -R "/etc/sysctl.d"
-chown root:root -R "/etc/profile.d"
-chown root:root -R "/etc/syscheck.d"
+chown -R root:root "/etc/systemd"
+chown -R root:root "/etc/iptables"
+chown -R root:root "/etc/pacman.d"
+chown -R root:root "/etc/security"
+chown -R root:root "/etc/sysctl.d"
+chown -R root:root "/etc/profile.d"
+chown -R root:root "/etc/syscheck.d"
 
 chown root:root "/etc/motd"
 chown root:root "/etc/hosts"
@@ -103,6 +104,7 @@ find "/etc/systemd" -type f -exec chmod 0444 {} \;
 find "/etc/pacman.d" -type f -exec chmod 0440 {} \;
 find "/etc/sysctl.d" -type f -exec chmod 0440 {} \;
 find "/etc/security" -type f -exec chmod 0440 {} \;
+find "/etc/modprobe.d" -type f -exec chmod 0440 {} \;
 find "/etc/systemd/network" -type f -exec chmod 0444 {} \;
 
 if [ -d "/etc/syscheck.d" ]; then
