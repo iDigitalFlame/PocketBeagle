@@ -20,7 +20,7 @@ if [ $UID -ne 0 ]; then
 fi
 
 if [ $# -lt 3 ]; then
-    printf "%s <tar image> <uboot dir> <disk> [source script]" "$0" 1>&2
+    printf "%s <tar_image> <uboot dir> <disk> [source script]" "$0" 1>&2
     exit 1
 fi
 
@@ -121,10 +121,18 @@ checks() {
 cleanup() {
     print "Performing cleanup..."
     sync
-    printf '-1\n' > /proc/sys/fs/binfmt_misc/status 2> /dev/null
+    [ -e "/proc/sys/fs/binfmt_misc/arm" ] && printf '-1\n' > "/proc/sys/fs/binfmt_misc/arm"
     umount "/proc/sys/fs/binfmt_misc" 2> /dev/null
+    lsof -n | grep "$ROOT" | awk '{print $2}' | xargs -I % kill -9 % 2> /dev/null
+    sleep 5
+    umount "${ROOT}/sys" 2> /dev/null
+    umount "${ROOT}/dev" 2> /dev/null
+    umount "${ROOT}/proc" 2> /dev/null
+    umount "${ROOT}/dev" 2> /dev/null
+    sync
     umount "${ROOT}/var" 2> /dev/null
-    umount "${ROOT}" 2> /dev/null
+    umount "${ROOT}"
+    sync
     rmdir "${ROOT}" 2> /dev/null
     if [ $# -ne 1 ]; then
         exit 0
@@ -184,7 +192,7 @@ sync
 mac=$(printf '%x%x:%x%x:%x%x' $((RANDOM % 10)) $((RANDOM % 10)) $((RANDOM % 10)) $((RANDOM % 10)) $((RANDOM % 10)) $((RANDOM % 10)))
 
 mkdir "${ROOT}${SYSCONFIG_DIR}/etc/modprobe.d"
-printf "options g_ether host_addr=be:ef:ed:${mac} dev_addr=${mac}\n" > "${ROOT}${SYSCONFIG_DIR}/etc/modprobe.d/gadget.conf"
+printf "options g_ether host_addr=be:ef:ed:%s dev_addr=%s\n" "$mac" "$mac" > "${ROOT}${SYSCONFIG_DIR}/etc/modprobe.d/gadget.conf"
 
 # PocketBeagle console baud rate is always 115200 for some reason.
 printf 'if test -n ${distro_bootpart}; then setenv bootpart ${distro_bootpart}; ' > "${ROOT}/boot/boot.txt"
@@ -270,6 +278,13 @@ printf 'tmpfs          /dev/shm tmpfs rw,noatime,nodev,noexec,nosuid            
 printf '/dev/mmcblk0p1 /        ext4  ro,noatime,nodev,discard                                                                      0 1\n' >> "${ROOT}/etc/fstab"
 printf '/dev/mmcblk0p2 /var     btrfs rw,noatime,nodev,noexec,nosuid,space_cache=v2,compress=zstd,ssd,discard=async,subvol=/base    0 0\n' >> "${ROOT}/etc/fstab"
 
+unset HOME
+unset PIP_USER
+unset PYTHONSTARTUP
+unset PYTHONUSERBASE
+
+export HOME="/root"
+
 # SYSCONFIG Files
 export ROOT
 export SYSCONFIG
@@ -286,7 +301,7 @@ chmod 0444 "${ROOT}/boot/boot.scr"
 chmod 0444 "${ROOT}/etc/sysconfig.conf"
 chmod -R 0555 "${ROOT}${SYSCONFIG_DIR}/bin"
 
-print "Preperaring to chroot into \"${ROOT}\".."
+printf "\033[1;32mPreperaring to chroot into \033[0m\"${ROOT}\"\033[1;32m..\033[0m\n"
 exec "mount -o bind /dev ${ROOT}/dev"
 exec "mount -o bind /sys ${ROOT}/sys"
 exec "mount -o bind /proc ${ROOT}/proc"
@@ -323,4 +338,5 @@ sync
 
 printf "\033[1;32mPlease change the \033[0mroot\033[1;32m user password on first login!!\033[0m\n"
 print "Done!"
+
 cleanup
