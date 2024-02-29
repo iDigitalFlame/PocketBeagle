@@ -7,5 +7,5 @@ Operation   = Upgrade
 
 [Action]
 When        = PostTransaction
-Exec        = /usr/bin/syslink
+Exec        = /usr/bin/bash -c "[ ${SYSUPDATE:-0} -eq 0 ] && syslink || exit 0"
 Description = Fixing permissions for system files..
