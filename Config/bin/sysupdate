@@ -23,7 +23,7 @@ if [ "$1" == "--auto" ]; then
         pacman -Syuw --noconfirm
         exit 0
     fi
-    pacman -Syu --noconfirm
+    env SYSUPDATE=1 pacman -Syu --noconfirm
 else
     env SYSUPDATE=1 pacman -Syu
 fi

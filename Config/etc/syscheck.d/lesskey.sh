@@ -1,7 +1,7 @@
 #!/usr/bin/bash
 
-ln -sT "/etc/sysless" "/etc/syslesskey" 2> /dev/null
-ln -sT "/etc/sysless" "/usr/local/etc/syslesskey" 2> /dev/null
+linkcheck "/etc/syslesskey" "/etc/sysless"
+linkcheck "/usr/local/etc/syslesskey" "/etc/sysless"
 
 chmod 0444 "/etc/sysless"
 chmod 0444 "/etc/syslesskey"

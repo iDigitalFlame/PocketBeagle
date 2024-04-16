@@ -28,6 +28,7 @@ IgnoreUserKnownHosts            no
 PermitEmptyPasswords            no
 AllowAgentForwarding            no
 PubkeyAuthentication            yes
+AuthenticationMethods           publickey
 PasswordAuthentication          yes
 KerberosAuthentication          no
 HostbasedAuthentication         no
