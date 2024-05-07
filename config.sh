@@ -304,9 +304,9 @@ mkdir -p "${SETUP_DIRECTORY}/etc" 2> /dev/null
 /usr/bin/printf 'lientAliveCountMax             0\nClientAliveInterval             600\nIgnoreUse' >> "${SETUP_DIRECTORY}/etc/ssh/sshd_config"
 /usr/bin/printf 'rKnownHosts            no\nPermitEmptyPasswords            no\nAllowAgentForward' >> "${SETUP_DIRECTORY}/etc/ssh/sshd_config"
 /usr/bin/printf 'ing            no\nPubkeyAuthentication            yes\nAuthenticationMethods   ' >> "${SETUP_DIRECTORY}/etc/ssh/sshd_config"
-/usr/bin/printf '        publickey\nPasswordAuthentication          yes\nKerberosAuthentication  ' >> "${SETUP_DIRECTORY}/etc/ssh/sshd_config"
-/usr/bin/printf '        no\nHostbasedAuthentication         no\nChallengeResponseAuthentication ' >> "${SETUP_DIRECTORY}/etc/ssh/sshd_config"
-/usr/bin/printf 'no\n' >> "${SETUP_DIRECTORY}/etc/ssh/sshd_config"
+/usr/bin/printf '        publickey password\nPasswordAuthentication          yes\nKerberosAuthent' >> "${SETUP_DIRECTORY}/etc/ssh/sshd_config"
+/usr/bin/printf 'ication          no\nHostbasedAuthentication         no\nChallengeResponseAuthen' >> "${SETUP_DIRECTORY}/etc/ssh/sshd_config"
+/usr/bin/printf 'tication no\n' >> "${SETUP_DIRECTORY}/etc/ssh/sshd_config"
 
 # Create file "/etc/syscheck.d/cache.sh"
 /usr/bin/printf "" > "${SETUP_DIRECTORY}/etc/syscheck.d/cache.sh"
