@@ -65,3 +65,5 @@ python build-config.py ./Config ./config.sh
 
 This will generate the configuration script from any changes made in the `Config`
 folder. *(Requires `python3`)*
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/Z8Z4121TDS)
