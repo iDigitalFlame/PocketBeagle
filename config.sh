@@ -131,8 +131,8 @@ mkdir -p "${SETUP_DIRECTORY}/etc" 2> /dev/null
 /usr/bin/printf 'mod 0400 "${SYSCONFIG}/etc/nftables.conf"\nfi\n\nif [ -d "/etc/syscheck.d" ]; th' >> "${SETUP_DIRECTORY}/bin/syslink"
 /usr/bin/printf 'en\n    for entry in /etc/syscheck.d/*.sh; do\n        if [ -f "$entry" ]; then\n' >> "${SETUP_DIRECTORY}/bin/syslink"
 /usr/bin/printf '            printf '\''Processing script "%%s"..\\n'\'' "$entry"\n            so' >> "${SETUP_DIRECTORY}/bin/syslink"
-/usr/bin/printf 'urce "$entry"\n        fi\n    done\nfi\n\necho "Broken Links Found:"\nfind /etc' >> "${SETUP_DIRECTORY}/bin/syslink"
-/usr/bin/printf ' -xtype l -xdev 2> /dev/null | grep -vE "/proc|/tmp|/run"\necho "Done!"\n' >> "${SETUP_DIRECTORY}/bin/syslink"
+/usr/bin/printf 'urce "$entry"\n        fi\n    done\nfi\n\nsync\necho "Broken Links Found:"\nfin' >> "${SETUP_DIRECTORY}/bin/syslink"
+/usr/bin/printf 'd /etc -xtype l -xdev 2> /dev/null | grep -vE "/proc|/tmp|/run"\necho "Done!"\n' >> "${SETUP_DIRECTORY}/bin/syslink"
 
 # Create file "/bin/sysupdate"
 /usr/bin/printf "" > "${SETUP_DIRECTORY}/bin/sysupdate"
