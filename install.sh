@@ -1,5 +1,5 @@
 #!/usr/bin/bash
-# Copyright 2021 - 2024 iDigitalFlame
+# Copyright 2021 - 2025 iDigitalFlame
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -182,6 +182,10 @@ setup_config() {
     mkdir -p "${SETUP_ROOT}/var/cache/pacman"
     mkdir -p "${SETUP_ROOT}/var/cache/pacman/pkg"
     chmod 0555 "${SETUP_ROOT}/var/db/pacman"
+
+    mkdir "${SETUP_ROOT}/var/cache/python"
+    chmod 3777 "${SETUP_ROOT}/var/cache/python"
+    chown root:root "${SETUP_ROOT}/var/cache/python"
 
     cat "${SETUP_ROOT}/etc/pacman.conf"
 
