@@ -12,3 +12,4 @@ LinkLocalAddressing = no
 
 [Route]
 Gateway             = 10.1.10.1
+GatewayOnLink       = yes
