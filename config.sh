@@ -1,6 +1,6 @@
 #!/bin/bash
 # Automatically generated build files script.
-# Args: build-config.py ./Config config.sh
+# Args: build-config.py Config config.sh
 
 mkdir -p "${SETUP_DIRECTORY}/bin" 2> /dev/null
 mkdir -p "${SETUP_DIRECTORY}/etc/pacman.d/hooks" 2> /dev/null
@@ -301,18 +301,17 @@ mkdir -p "${SETUP_DIRECTORY}/etc/tmpfiles.d" 2> /dev/null
 /usr/bin/printf '           sftp /usr/lib/ssh/sftp-server\nPrintMotd                       no\nPe' >> "${SETUP_DIRECTORY}/etc/ssh/sshd_config"
 /usr/bin/printf 'rmitTTY                       yes\nCompression                     no\nMaxStartu' >> "${SETUP_DIRECTORY}/etc/ssh/sshd_config"
 /usr/bin/printf 'ps                     10:30:100\nGatewayPorts                    no\nPermitTunn' >> "${SETUP_DIRECTORY}/etc/ssh/sshd_config"
-/usr/bin/printf 'el                    no\nPrintLastLog                    yes\nIgnoreRhosts     ' >> "${SETUP_DIRECTORY}/etc/ssh/sshd_config"
-/usr/bin/printf '               yes\nTCPKeepAlive                    yes\nAddressFamily          ' >> "${SETUP_DIRECTORY}/etc/ssh/sshd_config"
-/usr/bin/printf '         any\nListenAddress                   10.1.10.1\nKexAlgorithms          ' >> "${SETUP_DIRECTORY}/etc/ssh/sshd_config"
-/usr/bin/printf '         curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256\nLogi' >> "${SETUP_DIRECTORY}/etc/ssh/sshd_config"
-/usr/bin/printf 'nGraceTime                  1m\nPermitRootLogin                 yes\nAllowTcpFor' >> "${SETUP_DIRECTORY}/etc/ssh/sshd_config"
-/usr/bin/printf 'warding              no\nAuthorizedKeysFile              .ssh/authorized_keys\nC' >> "${SETUP_DIRECTORY}/etc/ssh/sshd_config"
-/usr/bin/printf 'lientAliveCountMax             0\nClientAliveInterval             600\nIgnoreUse' >> "${SETUP_DIRECTORY}/etc/ssh/sshd_config"
-/usr/bin/printf 'rKnownHosts            no\nPermitEmptyPasswords            no\nAllowAgentForward' >> "${SETUP_DIRECTORY}/etc/ssh/sshd_config"
-/usr/bin/printf 'ing            no\nPubkeyAuthentication            yes\nAuthenticationMethods   ' >> "${SETUP_DIRECTORY}/etc/ssh/sshd_config"
-/usr/bin/printf '        publickey password\nPasswordAuthentication          yes\nKerberosAuthent' >> "${SETUP_DIRECTORY}/etc/ssh/sshd_config"
-/usr/bin/printf 'ication          no\nHostbasedAuthentication         no\nChallengeResponseAuthen' >> "${SETUP_DIRECTORY}/etc/ssh/sshd_config"
-/usr/bin/printf 'tication no\n' >> "${SETUP_DIRECTORY}/etc/ssh/sshd_config"
+/usr/bin/printf 'el                    no\nIgnoreRhosts                    yes\nTCPKeepAlive     ' >> "${SETUP_DIRECTORY}/etc/ssh/sshd_config"
+/usr/bin/printf '               yes\nAddressFamily                   any\nListenAddress          ' >> "${SETUP_DIRECTORY}/etc/ssh/sshd_config"
+/usr/bin/printf '         10.1.10.1\nKexAlgorithms                   curve25519-sha256@libssh.org' >> "${SETUP_DIRECTORY}/etc/ssh/sshd_config"
+/usr/bin/printf ',diffie-hellman-group-exchange-sha256\nLoginGraceTime                  1m\nPermi' >> "${SETUP_DIRECTORY}/etc/ssh/sshd_config"
+/usr/bin/printf 'tRootLogin                 yes\nAllowTcpForwarding              no\nAuthorizedKe' >> "${SETUP_DIRECTORY}/etc/ssh/sshd_config"
+/usr/bin/printf 'ysFile              .ssh/authorized_keys\nClientAliveCountMax             0\nCli' >> "${SETUP_DIRECTORY}/etc/ssh/sshd_config"
+/usr/bin/printf 'entAliveInterval             600\nIgnoreUserKnownHosts            no\nPermitEmpt' >> "${SETUP_DIRECTORY}/etc/ssh/sshd_config"
+/usr/bin/printf 'yPasswords            no\nAllowAgentForwarding            no\nPubkeyAuthenticati' >> "${SETUP_DIRECTORY}/etc/ssh/sshd_config"
+/usr/bin/printf 'on            yes\nAuthenticationMethods           publickey password\nPasswordA' >> "${SETUP_DIRECTORY}/etc/ssh/sshd_config"
+/usr/bin/printf 'uthentication          yes\nKerberosAuthentication          no\nHostbasedAuthent' >> "${SETUP_DIRECTORY}/etc/ssh/sshd_config"
+/usr/bin/printf 'ication         no\nChallengeResponseAuthentication no\n' >> "${SETUP_DIRECTORY}/etc/ssh/sshd_config"
 
 # Create file "/etc/syscheck.d/cache.sh"
 /usr/bin/printf "" > "${SETUP_DIRECTORY}/etc/syscheck.d/cache.sh"
