@@ -1,6 +1,6 @@
 #!/bin/bash
 # Automatically generated build files script.
-# Args: build-config.py Config config.sh
+# Args: build-config.py ./Config ./config.sh
 
 mkdir -p "${SETUP_DIRECTORY}/bin" 2> /dev/null
 mkdir -p "${SETUP_DIRECTORY}/etc/pacman.d/hooks" 2> /dev/null
