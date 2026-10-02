@@ -7,5 +7,5 @@ Operation   = Upgrade
 
 [Action]
 When        = PostTransaction
-Exec        = /usr/bin/bash -c "mount -ro remount,ro / 2> /dev/null || mount -Rro remount,ro /"
+Exec        = /usr/bin/sh -c "mount -ro remount,ro / 2> /dev/null || mount -Rro remount,ro /"
 Description = Mounting / as read only..

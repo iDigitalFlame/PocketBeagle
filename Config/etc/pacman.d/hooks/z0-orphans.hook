@@ -6,5 +6,5 @@ Operation   = Upgrade
 
 [Action]
 When        = PostTransaction
-Exec        = /usr/bin/bash -c "pacman -Qtdq || echo 'No orphans found.'"
+Exec        = /usr/bin/sh -c 'pacman -Qtdq || echo "No orphans found."'
 Description = Finding orphan packages..

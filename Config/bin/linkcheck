@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 
-set -u
+set -uo pipefail
 
 if [ $# -ne 2 ]; then
     echo "linkcheck <link> <target>"

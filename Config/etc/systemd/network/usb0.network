@@ -7,9 +7,9 @@ ActivationPolicy    = always-up
 [Network]
 DNS                 = 10.1.10.2
 Address             = 10.1.10.1/30
-IPv6AcceptRA        = no
-LinkLocalAddressing = no
+IPv6AcceptRA        = false
+LinkLocalAddressing = false
 
 [Route]
 Gateway             = 10.1.10.1
-GatewayOnLink       = yes
+GatewayOnLink       = true

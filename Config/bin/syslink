@@ -12,7 +12,7 @@ fi
 
 SYSCONFIG=${SYSCONFIG%/}
 
-if ! [ "$UID" = "0" ]; then
+if ! [ "$USER" = "root" ]; then
     echo "Error: root is required!"
     exit 1
 fi
@@ -116,7 +116,7 @@ if [ -e "${SYSCONFIG}/etc/nftables.conf" ]; then
 fi
 
 if [ -d "/etc/syscheck.d" ]; then
-    for entry in /etc/syscheck.d/*.sh; do
+    for entry in "/etc/syscheck.d/"*.sh; do
         if [ -f "$entry" ]; then
             printf 'Processing script "%s"..\n' "$entry"
             source "$entry"
